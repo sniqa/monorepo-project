@@ -1,0 +1,17 @@
+{
+    "name": "json-router",
+    "private": true,
+    "version": "1.0.0",
+    "main": "./src/main.ts",
+    "scripts": {
+      
+    },
+    "dependencies": {
+      
+    },
+    "devDependencies": {
+   
+      "typescript": "^4.5.4"
+     
+    }
+  }
