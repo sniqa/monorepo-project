@@ -27,6 +27,11 @@ export enum RouterPath {
 
 	PATH_SETTINGS = 'settings',
 	PATH_ROOT_SETTINGS = '/settings',
+
+	PATH_LOGIN = 'login',
+	PAHT_ROOT_LOGIN = '/login',
+
+	
 }
 
 export const routerPathMap = {
