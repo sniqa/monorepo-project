@@ -3,6 +3,7 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import MainLayout from './layouts/MainLayout'
 import LoginPage from './logicControlComps/LoginPage'
 import { RouterPath } from './router'
+import RequiredAuth from './router/RequiredAuth'
 import Aside from './views/Aside'
 import Header from './views/Header'
 import Home from './views/Home'
@@ -19,7 +20,12 @@ export default function App() {
 				<Routes>
 					<Route
 						path={RouterPath.PATH_ROOT}
-						element={<MainLayout aside={<Aside />} main={<Outlet />} header={<Header />} />}
+						element={
+							<RequiredAuth
+								target={<MainLayout aside={<Aside />} main={<Outlet />} header={<Header />} />}
+								redirect={RouterPath.PATH_LOGIN}
+							/>
+						}
 					>
 						<Route path={RouterPath.PATH_LOGIN} element={<LoginPage />}></Route>
 						<Route index element={<Home />} />
