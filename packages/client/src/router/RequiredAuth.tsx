@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
+import { useAppSelector } from '../store'
 
 interface RequiredAuthPorps {
 	target: JSX.Element
@@ -7,11 +7,13 @@ interface RequiredAuthPorps {
 }
 
 export default function RequiredAuth({ target, redirect }: RequiredAuthPorps) {
-	const navigate = useCallback(useNavigate(), [])
+	const { isLogin } = useAppSelector((state) => state.user)
 
-	//   if () {
-	//   navigate(redirect)
-	// }
+	let location = useLocation()
+
+	if (!isLogin) {
+		return <Navigate to={redirect} state={{ from: location }} replace />
+	}
 
 	return target
 }

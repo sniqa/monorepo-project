@@ -12,11 +12,7 @@ interface AsideMenuProps {
 	selectColor?: string
 }
 
-export default function AsideMenu({
-	list,
-	onClick = () => {},
-	selectColor = '',
-}: AsideMenuProps) {
+export default function AsideMenu({ list, onClick = () => {}, selectColor = '' }: AsideMenuProps) {
 	const [curSelectText, setCurSelectText] = useState('')
 
 	const menuItemClick = useCallback((val: string, index: number) => {
@@ -34,17 +30,14 @@ export default function AsideMenu({
 						sx={{
 							height: '3.5rem',
 							mx: '1rem',
-							borderBottom:
-								index !== list.length - 1 ? '1px solid #E5E7EB' : '',
+							borderBottom: index !== list.length - 1 ? '1px solid #E5E7EB' : '',
 							color: isSelect ? selectColor : '',
 							paddingLeft: isSelect ? '2.5rem' : '1rem',
 							transition: 'padding-left 0.6s',
 						}}
 						onClick={() => menuItemClick(iconMenu.text, index)}
 					>
-						<ListItemIcon sx={{ color: isSelect ? selectColor : '' }}>
-							{iconMenu.icon}
-						</ListItemIcon>
+						<ListItemIcon sx={{ color: isSelect ? selectColor : '' }}>{iconMenu.icon}</ListItemIcon>
 
 						<ListItemText>{iconMenu.text}</ListItemText>
 					</MenuItem>
@@ -53,5 +46,3 @@ export default function AsideMenu({
 		</MenuList>
 	)
 }
-
-function Menu() {}

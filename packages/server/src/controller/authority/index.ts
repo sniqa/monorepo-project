@@ -5,6 +5,6 @@
 
 // 角色是一组预定义的权限组合
 
-const mergeAuthority = () => { }
-const removeAuthority = () => { }
-const getAuthority = () => {}
+export { mergeAuthority } from './mergeAuthority'
+export { removeAuthority } from './removeAuthority'
+export { getAuthority } from './getAuthority'

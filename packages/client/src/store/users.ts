@@ -3,12 +3,13 @@ import type { RootState } from '../store'
 
 // Define the initial state using that type
 const initialState = {
-	value: 0,
+	info: '',
+	token: '',
+	isLogin: true,
 }
 
 export const userSlice = createSlice({
 	name: 'user',
-	// `createSlice` will infer the state type from the `initialState` argument
 	initialState,
 	reducers: {},
 })

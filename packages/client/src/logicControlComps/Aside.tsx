@@ -8,7 +8,7 @@ import UserProfile from '../comps/UserProfile'
 import AsideMenu from '../comps/AsideMenu'
 import { useCallback, useState } from 'react'
 
-import { routerPathMap } from '../router'
+import { RouterPath, routerPathMap } from '../router'
 
 const list = [
 	{ icon: <HomeIcon />, text: 'Home' },
@@ -20,16 +20,18 @@ const list = [
 export default function Aside() {
 	const navigate = useCallback(useNavigate(), [])
 
-	const onClick = useCallback((val: string, index: number) => {
+	const AsideMenuonClick = useCallback((val: string, index: number) => {
 		const path = Reflect.get(routerPathMap, val.toLowerCase())
 		navigate(path)
 	}, [])
 
+	const userProfileClick = useCallback(() => navigate(RouterPath.PATH_ROOT_PERSON), [])
+
 	return (
 		<div className="w-18rem border-r border-gray-200 h-full flex flex-col">
-			<UserProfile avatar={''} nickname={'hello'} desc={'world'} />
+			<UserProfile avatar={''} nickname={'hello'} desc={'world'} onClick={userProfileClick} />
 
-			<AsideMenu list={list} selectColor={'green'} onClick={onClick} />
+			<AsideMenu list={list} selectColor={'green'} onClick={AsideMenuonClick} />
 		</div>
 	)
 }

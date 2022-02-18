@@ -45,6 +45,8 @@ const localStorageChexkboxsState: CheckboxState = {
 export default function Login(props: LoginProps) {
 	const { onSubmit } = useMemo(() => props, [])
 
+	// const onSubmit = () => {}
+
 	const [values, setValues] = useState<UserState>({
 		account: '',
 		password: '',
