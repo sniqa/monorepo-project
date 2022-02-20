@@ -1,41 +1,50 @@
-// export const PATH_ROOT = '/'
+// export const ROOT = '/'
 
-// export const PATH_HOME = 'home'
-// export const PATH_ROOT_HOME = PATH_ROOT + PATH_HOME
+// export const HOME = 'home'
+// export const ROOT_HOME = ROOT + HOME
 
-// export const PATH_CATEGORY = 'category'
-// export const PATH_ROOT_CATEGORY = PATH_ROOT + PATH_CATEGORY
+// export const CATEGORY = 'category'
+// export const ROOT_CATEGORY = ROOT + CATEGORY
 
-// export const PATH_PERSON = 'person'
-// export const PATH_ROOT_PERSON = PATH_ROOT + PATH_PERSON
+// export const PERSON = 'person'
+// export const ROOT_PERSON = ROOT + PERSON
 
-// export const PATH_SETTINGS = 'settings'
-// export const PATH_ROOT_SETTINGS = PATH_ROOT + PATH_SETTINGS
+// export const SETTINGS = 'settings'
+// export const ROOT_SETTINGS = ROOT + SETTINGS
 
 export enum RouterPath {
-	PATH_ROOT = '/',
-	PATH_EMPTY = '',
+	ROOT = '/',
+	EMPTY = '',
 
-	PATH_HOME = 'home',
-	PATH_ROOT_HOME = '/home',
+	HOME = 'home',
+	ROOT_HOME = '/home',
 
-	PATH_CATEGORY = 'category',
-	PATH_ROOT_CATEGORY = '/category',
+	CATEGORY = 'category',
+	ROOT_CATEGORY = '/category',
 
-	PATH_PERSON = 'person',
-	PATH_ROOT_PERSON = '/person',
+	PERSON = 'person',
+	ROOT_PERSON = '/person',
 
-	PATH_SETTINGS = 'settings',
-	PATH_ROOT_SETTINGS = '/settings',
+	SETTINGS = 'settings',
+	ROOT_SETTINGS = '/settings',
 
-	PATH_LOGIN = 'login',
-	PATH_ROOT_LOGIN = '/login',
+	LOGIN = 'login',
+	ROOT_LOGIN = '/login',
+
+	MANAGE = 'manage',
+	ROOT_MANAGE = '/manage',
+	USER_MANAGE = 'user',
+	ROOT_USER_MANAGE = '/manage/user',
+	AUTH_MANAGE = 'auth',
+	ROOT_AUTH_MANAGE = '/manage/auth'
+
 }
 
 export const routerPathMap = {
-	[RouterPath.PATH_ROOT || RouterPath.PATH_EMPTY]: RouterPath.PATH_ROOT,
-	[RouterPath.PATH_HOME]: RouterPath.PATH_ROOT_HOME,
-	[RouterPath.PATH_CATEGORY]: RouterPath.PATH_ROOT_CATEGORY,
-	[RouterPath.PATH_PERSON]: RouterPath.PATH_ROOT_PERSON,
-	[RouterPath.PATH_SETTINGS]: RouterPath.PATH_ROOT_SETTINGS,
+	[RouterPath.ROOT || RouterPath.EMPTY]: RouterPath.ROOT,
+	[RouterPath.HOME]: RouterPath.ROOT_HOME,
+	[RouterPath.CATEGORY]: RouterPath.ROOT_CATEGORY,
+	[RouterPath.PERSON]: RouterPath.ROOT_PERSON,
+	[RouterPath.SETTINGS]: RouterPath.ROOT_SETTINGS,
+	[RouterPath.MANAGE]: RouterPath.ROOT_MANAGE
 }

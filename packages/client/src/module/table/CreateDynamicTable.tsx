@@ -1,51 +1,52 @@
-import { Button, TableCell, TableHead, TableRow, TextField } from '@mui/material'
-import { useState } from 'react'
+import { Button } from '@mui/material'
+import { useCallback, useState } from 'react'
+import Alertbar from '../../comps/Alertbar'
+import CustomInput from '../../comps/CustomInput'
 
 export default function CreateDynamicTable() {
-	const createBtnClick = () => {}
-	const createFieldBtnClick = () => {}
+	const createTableName = useCallback(() => {}, [])
 
-	const [tableFields, setTableFields] = useState<Array<string>>([''])
+	const [msg, setMsg] = useState('')
 
-	let temp = {}
+	const createTableField = useCallback(() => {
+		const index = tableFields.length
 
-	const enter = () => {
-		temp = { ...tableFields }
-		console.log(temp)
-	}
+		setMsg('alert' + index)
 
-	const del = (val: string, index: number) => {
-		console.log(val, 'index:' + index)
+		if (tableFields[index - 1] === '') {
+			return
+		}
 
-		console.log(tableFields.filter((val, idx) => index !== idx))
+		setTableFields([...tableFields, ` `])
+		console.log(tableFields)
+	}, [])
 
-		console.log(setTableFields(tableFields.filter((val, idx) => index !== idx)))
-	}
+	const [tableFields, setTableFields] = useState<Array<string>>([])
+
+	const setField = useCallback((index: number, val: string) => {
+		if (tableFields.some((field) => field === val)) {
+		}
+
+		setTableFields(Object.assign(tableFields, { [index]: val }))
+	}, [])
 
 	return (
-		<div className="flex m-4">
-			<div className="">
-				<Button onClick={createBtnClick}>{`创建表格`}</Button>
-			</div>
+		<div className="flex flex-col m-4 border w-50rem p-1rem">
+			<Alertbar message={msg} />
 
-			<div className="">
-				<TextField label="表格名称" />
-			</div>
+			<CustomInput require label="表格名称" onChange={createTableName} />
 
-			<div className="flex flex-col">
-				{tableFields.map((field, index) => (
-					<div className="" key={field + index}>
-						<TextField defaultValue={field} />
-						{tableFields.length - 1 === index ? (
-							<Button onClick={() => setTableFields([...tableFields, index.toString()])}>{`+`}</Button>
-						) : (
-							<Button onClick={() => del(field, index)}>{`-`}</Button>
-						)}
-					</div>
-				))}
-			</div>
+			{tableFields.map((field, index) => (
+				<CustomInput
+					key={field}
+					require
+					defaultValue={field}
+					label="字段名称"
+					onBlur={(e) => setField(index, e.target.value.trim())}
+				/>
+			))}
 
-			<Button onClick={enter}>{`确定`}</Button>
+			<Button variant={`contained`} onClick={createTableField} disableElevation>{`添加字段`}</Button>
 		</div>
 	)
 }

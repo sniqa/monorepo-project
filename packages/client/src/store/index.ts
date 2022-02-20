@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-
+import breadcrumbsInfoReducer from './breadcrumbs'
 import userReducer from './users'
+
 
 const store = configureStore({
 	reducer: {
 		user: userReducer,
+		breadcrumbsInfo: breadcrumbsInfoReducer
 	},
 })
 

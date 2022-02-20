@@ -1,21 +1,22 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { MainContainer, MainLayout } from './layouts/MainLayout'
+import Aside from './logicControlComps/Aside'
 import LoginPage from './logicControlComps/LoginPage'
+import { CreateDynamicTable } from './module/table'
 import { RouterPath } from './router'
 import RequiredAuth from './router/RequiredAuth'
-import Aside from './logicControlComps/Aside'
 import Header from './views/Header'
 import Home from './views/Home'
 import Loading from './views/Loading'
 
-import List from './comps/List'
-
-import { CreateDynamicTable } from './module/table'
-
 const Category = lazy(() => import('./views/Category'))
 const Person = lazy(() => import('./views/Person'))
 const Settings = lazy(() => import('./views/Settings'))
+const Manager = lazy(() => import('./logicControlComps/ManagerPage'))
+
+const UserManage = lazy(() => import('./views/UserManage'))
+const AuthManage = lazy(() => import('./views/AuthManage'))
 
 export default function App() {
 	return (
@@ -24,23 +25,27 @@ export default function App() {
 				<BrowserRouter>
 					<Routes>
 						<Route
-							path={RouterPath.PATH_ROOT}
+							path={RouterPath.ROOT}
 							element={
 								<RequiredAuth
 									target={<MainLayout aside={<Aside />} header={<Header />} main={<Outlet />} />}
-									redirect={RouterPath.PATH_ROOT_LOGIN}
+									redirect={RouterPath.ROOT_LOGIN}
 								/>
 							}
 						>
 							<Route index element={<Home />} />
-							<Route path={RouterPath.PATH_CATEGORY} element={<Category />} />
-							<Route path={RouterPath.PATH_PERSON} element={<Person />} />
-							<Route path={RouterPath.PATH_SETTINGS} element={<Settings />} />
+							<Route path={RouterPath.CATEGORY} element={<Category />} />
+							<Route path={RouterPath.PERSON} element={<Person />} />
+							<Route path={RouterPath.SETTINGS} element={<Settings />} />
+							<Route path={RouterPath.MANAGE} element={<Outlet />}>
+								<Route path={RouterPath.USER_MANAGE} element={<UserManage />} />
+								<Route path={RouterPath.AUTH_MANAGE} element={<AuthManage />} />
+							</Route>
 							{/* <Route path={'list'} element={<List />} /> */}
-							<Route path={RouterPath.PATH_ROOT_HOME} element={<Home />} />
+							<Route path={RouterPath.ROOT_HOME} element={<Home />} />
 						</Route>
 
-						<Route path={RouterPath.PATH_ROOT_LOGIN} element={<LoginPage />}></Route>
+						<Route path={RouterPath.ROOT_LOGIN} element={<LoginPage />}></Route>
 						<Route path={'/table'} element={<CreateDynamicTable />}></Route>
 					</Routes>
 				</BrowserRouter>

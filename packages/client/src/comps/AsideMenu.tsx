@@ -1,48 +1,64 @@
-import { ListItemIcon, ListItemText, MenuItem, MenuList } from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Accordion, AccordionDetails, AccordionSummary, ListItemIcon, ListItemText } from '@mui/material'
 import { useCallback, useState } from 'react'
 
-interface IconMenu {
+export interface IconMenu {
 	icon: JSX.Element
 	text: string
+	children?: Array<IconMenu>
+	to?: string
 }
 
 interface AsideMenuProps {
 	list: Array<IconMenu>
-	onClick?: (val: string, index: number) => void
+	onClick?: (val: string, title: string) => void
 	selectColor?: string
 }
 
 export default function AsideMenu({ list, onClick = () => {}, selectColor = '' }: AsideMenuProps) {
 	const [curSelectText, setCurSelectText] = useState('')
 
-	const menuItemClick = useCallback((val: string, index: number) => {
+	const menuItemClick = useCallback((val: string, txt: string) => {
 		setCurSelectText(val)
-		onClick(val, index)
+		onClick(val, txt)
 	}, [])
 
 	return (
-		<MenuList sx={{ padding: 0 }} className={`hover:text-3rem`}>
+		// <MenuList sx={{ padding: 0 }} className={`inline-flex flex-col`}>
+		<div className="">
 			{list.map((iconMenu, index) => {
 				const isSelect = curSelectText === iconMenu.text
 				return (
-					<MenuItem
-						key={iconMenu.text}
+					<Accordion
 						sx={{
-							height: '3.5rem',
-							mx: '1rem',
-							borderBottom: index !== list.length - 1 ? '1px solid #E5E7EB' : '',
+							width: '100%',
 							color: isSelect ? selectColor : '',
-							paddingLeft: isSelect ? '2.5rem' : '1rem',
-							transition: 'padding-left 0.6s',
 						}}
-						onClick={() => menuItemClick(iconMenu.text, index)}
+						elevation={0}
+						disableGutters
+						key={iconMenu.text}
+						onClick={() => {
+							!iconMenu.children && menuItemClick(iconMenu.to || '', iconMenu.text)
+						}}
 					>
-						<ListItemIcon sx={{ color: isSelect ? selectColor : '' }}>{iconMenu.icon}</ListItemIcon>
+						<AccordionSummary
+							expandIcon={iconMenu.children && <ExpandMoreIcon />}
+							aria-controls="panel1a-content"
+							id="panel1a-header"
+						>
+							<ListItemIcon sx={{ color: isSelect ? selectColor : '' }}>{iconMenu.icon}</ListItemIcon>
 
-						<ListItemText>{iconMenu.text}</ListItemText>
-					</MenuItem>
+							<ListItemText>{iconMenu.text}</ListItemText>
+						</AccordionSummary>
+
+						{iconMenu.children && (
+							<AccordionDetails>
+								<AsideMenu list={iconMenu.children} selectColor={selectColor} onClick={onClick} />
+							</AccordionDetails>
+						)}
+					</Accordion>
 				)
 			})}
-		</MenuList>
+		</div>
 	)
 }
