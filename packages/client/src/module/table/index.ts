@@ -1,3 +1,3 @@
-import CreateDynamicTable from './CreateDynamicTable'
+import CreateTable from './CreateTable'
 
-export { CreateDynamicTable }
+export { CreateTable }

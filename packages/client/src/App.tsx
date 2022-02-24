@@ -3,7 +3,6 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
 import { MainContainer, MainLayout } from './layouts/MainLayout'
 import Aside from './logicControlComps/Aside'
 import LoginPage from './logicControlComps/LoginPage'
-import { CreateDynamicTable } from './module/table'
 import { RouterPath } from './router'
 import RequiredAuth from './router/RequiredAuth'
 import Header from './views/Header'
@@ -46,7 +45,6 @@ export default function App() {
 						</Route>
 
 						<Route path={RouterPath.ROOT_LOGIN} element={<LoginPage />}></Route>
-						<Route path={'/table'} element={<CreateDynamicTable />}></Route>
 					</Routes>
 				</BrowserRouter>
 			</Suspense>
