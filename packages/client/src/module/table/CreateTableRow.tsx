@@ -1,11 +1,10 @@
-import { TableRow, TableCell, Typography, InputBase } from '@mui/material'
-import { useMemo, useState, Fragment } from 'react'
-
-import { TableHeaderCol } from './CreateTableHeader'
-import { TableBodyRow } from './CreateTableBody'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import SaveIcon from '@mui/icons-material/Save'
+import { InputBase, TableCell, TableRow, Typography } from '@mui/material'
+import { useMemo, useState } from 'react'
+import { TableBodyRow } from './CreateTableBody'
+import { TableHeaderCol } from './CreateTableHeader'
 
 interface TableRow {
 	columes: Array<TableHeaderCol>
@@ -34,40 +33,51 @@ const CreateTableRow = (props: TableRow) => {
 		onDelete(row)
 	}
 
+	const onChange = (row: TableBodyRow, field: string, val: string) => {
+		Reflect.set(row, field, val)
+	}
+
 	return (
 		<TableRow>
-			{columes.map((colume, index) => (
-				<TableCell key={index} align={`center`} className={`w-10rem border border-box`}>
-					{(() => {
-						if (!colume.headerName) {
-							return ''
-						}
+			{columes.map(
+				(colume, index) =>
+					(colume.isHidden === undefined ? true : colume.isHidden) && (
+						<TableCell key={index} align={`center`} className={`w-10rem border border-box`}>
+							{(() => {
+								if (!colume.headerName) {
+									return ''
+								}
 
-						if (colume.editeAndDelete) {
-							return (
-								<div className={`flex justify-center items-center`}>
-									<EditIcon className={`cursor-pointer text-gray-500`} onClick={editIconOnClick} />
-									{isEditeState && (
-										<SaveIcon className={`mx-2 text-gray-500 cursor-pointer`} onClick={saveIconOnClick} />
-									)}
-									<DeleteIcon className={`cursor-pointer text-gray-500`} onClick={deleteIconOnClick} />
-								</div>
-							)
-						}
+								if (colume.editeAndDelete) {
+									return (
+										<div className={`flex justify-center items-center`}>
+											<EditIcon className={`cursor-pointer text-gray-500`} onClick={editIconOnClick} />
+											{isEditeState && (
+												<SaveIcon className={`mx-2 text-gray-500 cursor-pointer`} onClick={saveIconOnClick} />
+											)}
+											<DeleteIcon className={`cursor-pointer text-gray-500`} onClick={deleteIconOnClick} />
+										</div>
+									)
+								}
 
-						if (colume.field) {
-							const value = Reflect.get(row, colume.field)
-							return isEditeState ? (
-								<InputBase defaultValue={value} className={`border rounded px-2`}></InputBase>
-							) : (
-								<Typography>{value}</Typography>
-							)
-						}
+								if (colume.field) {
+									const value = Reflect.get(row, colume.field)
+									return isEditeState ? (
+										<InputBase
+											defaultValue={value}
+											className={`border rounded px-2`}
+											onChange={(e) => onChange(row, colume.field || '', e.target.value)}
+										></InputBase>
+									) : (
+										<Typography>{value}</Typography>
+									)
+								}
 
-						return <Typography>{''}</Typography>
-					})()}
-				</TableCell>
-			))}
+								return <Typography>{''}</Typography>
+							})()}
+						</TableCell>
+					)
+			)}
 		</TableRow>
 	)
 }
