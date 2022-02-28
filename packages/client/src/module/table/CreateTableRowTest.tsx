@@ -13,8 +13,7 @@ interface TableRow {
 	onDelete?: (row: TableBodyRow) => void
 	onSave?: (row: TableBodyRow) => void
 }
-
-const CreateTableRow = (props: TableRow) => {
+const CreateTableRowTest = (props: TableRow) => {
 	const { row, columes, onEdit = () => {}, onDelete = () => {}, onSave = () => {} } = useMemo(() => props, [props])
 
 	const [isEditeState, setIsEditeState] = useState(false)
@@ -36,7 +35,6 @@ const CreateTableRow = (props: TableRow) => {
 	const onChange = (row: TableBodyRow, field: string, val: string) => {
 		Reflect.set(row, field, val)
 	}
-
 	return (
 		<TableRow>
 			{columes.map(
@@ -44,10 +42,6 @@ const CreateTableRow = (props: TableRow) => {
 					(colume.isHidden === undefined ? true : colume.isHidden) && (
 						<TableCell key={index} align={`center`} className={`w-10rem border border-box`}>
 							{(() => {
-								if (!colume.headerName) {
-									return ''
-								}
-
 								if (colume.editeAndDelete) {
 									return (
 										<div className={`flex justify-center items-center`}>
@@ -60,20 +54,11 @@ const CreateTableRow = (props: TableRow) => {
 									)
 								}
 
-								if (colume.field) {
-									const value = Reflect.get(row, colume.field)
-									return isEditeState ? (
-										<InputBase
-											defaultValue={value}
-											className={`border rounded px-2`}
-											onChange={(e) => onChange(row, colume.field || '', e.target.value)}
-										></InputBase>
-									) : (
-										<Typography>{value}</Typography>
-									)
-								}
-
-								return <Typography>{''}</Typography>
+								return isEditeState
+									? colume.editCallback
+										? colume.editCallback(row)
+										: colume.callback(row)
+									: colume.callback(row)
 							})()}
 						</TableCell>
 					)
@@ -82,4 +67,4 @@ const CreateTableRow = (props: TableRow) => {
 	)
 }
 
-export default CreateTableRow
+export default CreateTableRowTest

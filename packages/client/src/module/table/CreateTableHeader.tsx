@@ -1,12 +1,14 @@
 import { TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { TableBodyRow } from './CreateTableBody'
 
 export interface TableHeaderCol {
 	field?: string
-	headerName?: string
-	type?: 'string' | 'selector' | 'calendar' | 'ipAddrFormat'
+	headerName: string
+	callback: (row?: TableBodyRow) => JSX.Element
 	editeAndDelete?: boolean
 	isHidden?: boolean
 	notHidden?: boolean
+	editCallback?: (row?: TableBodyRow) => JSX.Element
 }
 
 interface CreateTableHeaderProps {

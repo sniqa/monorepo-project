@@ -1,23 +1,48 @@
-import { Button, Modal } from '@mui/material'
-import { useState } from 'react'
-import { CreateTable } from '../module/table'
+import { Button, InputBase, Modal, TextField, Typography } from '@mui/material'
+import { useCallback, useState } from 'react'
+import CircleIcon from '@mui/icons-material/Circle'
+import { CreateTable, HideFields, TableHeaderCol } from '../module/table'
 import { TableBodyRow } from '../module/table/CreateTableBody'
 import AddNewUser from './AddNewUser'
 
-const columes = [
-	{ field: 'account', headerName: '账号' },
-	{ field: 'name', headerName: '名称' },
-	{ field: 'nickname', headerName: '昵称' },
-	{ field: 'gender', headerName: '性别' },
+const columes: Array<TableHeaderCol> = [
+	{
+		headerName: '状态',
+		callback: (row: any) => <CircleIcon sx={{ fontSize: '1rem', color: 'green' }} className="shadow-xl" />,
+	},
+	{
+		field: 'account',
+		headerName: '账号',
+		callback: (row: any) => <Typography>{`${Reflect.get(row, 'account') || ''}`}</Typography>,
+		editCallback: (row: any) => (
+			<TextField size="small" label="账号" variant="outlined" defaultValue={`${Reflect.get(row, 'account') || ''}`} />
+		),
+	},
+	{
+		field: 'name',
+		headerName: '名称',
+		callback: (row: any) => <Typography>{`${Reflect.get(row, 'name')}`}</Typography>,
+	},
+	{
+		field: 'nickname',
+		headerName: '昵称',
+		callback: (row: any) => <Typography>{`${Reflect.get(row, 'nickname')}`}</Typography>,
+	},
+	{
+		field: 'gender',
+		headerName: '性别',
+		callback: (row: any) => <Typography>{`${Reflect.get(row, 'gender')}`}</Typography>,
+	},
 	{
 		headerName: '操作',
 		editeAndDelete: true,
 		notHidden: true,
+		callback: () => <div />,
 	},
 ]
 
 const testRows = [
-	{ _id: 1, name: 'zwl1', nickname: 'zlw1', gender: 'male', account: 'zwl1' },
+	{ _id: 1, name: 'zwl1', nickname: 'zlw1', account: 'zwl1' },
 	{ _id: 2, account: 'zwl', name: 'zwl', nickname: 'zlw', gender: 'male' },
 	{ _id: 3, account: 'zwl', name: 'zwl', nickname: 'zlw', gender: 'male' },
 	{ _id: 4, account: 'zwl', name: 'zwl', nickname: 'zlw', gender: 'male' },
@@ -40,6 +65,8 @@ export const UserManage = () => {
 
 	const [rows, setRows] = useState(testRows)
 
+	const [cols, setCols] = useState(columes)
+
 	const showOrHidden = () => {
 		setFiledsSwitch(!fieldsSwitch)
 	}
@@ -49,31 +76,15 @@ export const UserManage = () => {
 	}
 
 	const onDelete = (row: TableBodyRow) => {
-		console.log(row)
+		setRows(rows.filter((curRow) => curRow !== row))
 	}
 
 	const [openModal, setOpenMadal] = useState(false)
 
-	// const addData = useCallback((val: object) => {
-	// 	setOpenMadal(false)
-	// 	const user = Object.assign({ _id: 44, ...val })
-	// 	setRows((old) => {
-	// 		const newusers = [user, ...old]
-	// 		console.log(newusers)
-
-	// 		return newusers
-	// 	})
-	// }, [])
-
-	const addData = (val: object) => {
+	const addData = useCallback((val: object) => {
 		setOpenMadal(false)
-		const user = Object.assign({ _id: 44, ...val })
-		setRows((old) => {
-			console.log([user, ...old] === old)
-
-			return [user, ...old]
-		})
-	}
+		setRows((old) => [{ _id: 22, ...val }, ...old])
+	}, [])
 
 	return (
 		<div className={`flex flex-col flex-grow border rounded-xl m-4 `}>
@@ -94,7 +105,23 @@ export const UserManage = () => {
 				</div>
 			</Modal>
 
-			<CreateTable columes={columes} rows={rows} fieldsSwitch={fieldsSwitch} onSave={onSave} onDelete={onDelete} />
+			<Modal
+				open={fieldsSwitch}
+				onClose={() => setFiledsSwitch(false)}
+				aria-labelledby="modal-modal-title"
+				aria-describedby="modal-modal-description"
+				className="flex justify-center items-center h-full"
+			>
+				<div className="">
+					<HideFields
+						columes={cols}
+						onConfirm={() => setFiledsSwitch(false)}
+						onChange={(columes) => setCols([...columes])}
+					/>
+				</div>
+			</Modal>
+
+			<CreateTable columes={cols} rows={rows} onSave={onSave} onDelete={onDelete} />
 		</div>
 	)
 }

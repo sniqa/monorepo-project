@@ -1,7 +1,7 @@
 import { TableBody } from '@mui/material'
 import { useMemo } from 'react'
 import { TableHeaderCol } from './CreateTableHeader'
-import CreateTableRow from './CreateTableRow'
+import CreateTableRowTest from './CreateTableRowTest'
 
 export interface TableBodyRow {
 	_id: number
@@ -15,12 +15,12 @@ interface CreateTableBodyProps {
 }
 
 const CreateTableBody = (props: CreateTableBodyProps) => {
-	const { rows, columes, onSave = () => {}, onDelete = () => {} } = useMemo(() => props, [])
+	const { rows, columes, onSave = () => {}, onDelete = () => {} } = props
 
 	return (
 		<TableBody>
 			{rows.map((row, rowIdx) => (
-				<CreateTableRow key={row._id} columes={columes} row={row} onSave={onSave} onDelete={onDelete} />
+				<CreateTableRowTest key={row._id} columes={columes} row={row} onSave={onSave} onDelete={onDelete} />
 			))}
 		</TableBody>
 	)
