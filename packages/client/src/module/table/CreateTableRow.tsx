@@ -48,7 +48,7 @@ const CreateTableRow = (props: TableRow) => {
 									return ''
 								}
 
-								if (colume.editeAndDelete) {
+								if (colume.editAndDelete) {
 									return (
 										<div className={`flex justify-center items-center`}>
 											<EditIcon className={`cursor-pointer text-gray-500`} onClick={editIconOnClick} />

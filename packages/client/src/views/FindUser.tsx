@@ -3,11 +3,11 @@ import { useState } from 'react'
 
 interface AddNewUserProps {
 	onCancle?: () => void
-	onAdd?: (userInfo: object) => void
+	onFind?: (userInfo: object) => void
 }
 
-const AddNewUser = (props: AddNewUserProps) => {
-	const { onCancle = () => {}, onAdd = () => {} } = props
+const FindUser = (props: AddNewUserProps) => {
+	const { onCancle = () => {}, onFind = () => {} } = props
 
 	const [userInfo, setUserInfo] = useState({
 		account: '',
@@ -22,7 +22,7 @@ const AddNewUser = (props: AddNewUserProps) => {
 
 	return (
 		<div className="bg-light-50 w-24rem flex flex-col p-4">
-			<Typography>{`添加新用户`}</Typography>
+			<Typography>{`查找用户`}</Typography>
 
 			<div className="h-4/5">
 				<TextField
@@ -57,10 +57,10 @@ const AddNewUser = (props: AddNewUserProps) => {
 
 			<div className="flex justify-end m-4">
 				<Button variant="outlined" sx={{ mr: '1rem' }} onClick={onCancle}>{`取消`}</Button>
-				<Button variant="contained" disableElevation onClick={() => onAdd(userInfo)}>{`确定`}</Button>
+				<Button variant="contained" disableElevation onClick={() => onFind(userInfo)}>{`确定`}</Button>
 			</div>
 		</div>
 	)
 }
 
-export default AddNewUser
+export default FindUser

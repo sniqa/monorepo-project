@@ -5,7 +5,7 @@ export interface TableHeaderCol {
 	field?: string
 	headerName: string
 	callback: (row?: TableBodyRow) => JSX.Element
-	editeAndDelete?: boolean
+	editAndDelete?: boolean
 	isHidden?: boolean
 	notHidden?: boolean
 	editCallback?: (row?: TableBodyRow) => JSX.Element

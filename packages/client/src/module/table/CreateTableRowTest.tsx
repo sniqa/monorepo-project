@@ -1,7 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import SaveIcon from '@mui/icons-material/Save'
-import { InputBase, TableCell, TableRow, Typography } from '@mui/material'
+import { TableCell, TableRow } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { TableBodyRow } from './CreateTableBody'
 import { TableHeaderCol } from './CreateTableHeader'
@@ -25,6 +25,8 @@ const CreateTableRowTest = (props: TableRow) => {
 
 	const saveIconOnClick = () => {
 		setIsEditeState(false)
+		console.log(row)
+
 		onSave(row)
 	}
 
@@ -32,9 +34,6 @@ const CreateTableRowTest = (props: TableRow) => {
 		onDelete(row)
 	}
 
-	const onChange = (row: TableBodyRow, field: string, val: string) => {
-		Reflect.set(row, field, val)
-	}
 	return (
 		<TableRow>
 			{columes.map(
@@ -42,7 +41,7 @@ const CreateTableRowTest = (props: TableRow) => {
 					(colume.isHidden === undefined ? true : colume.isHidden) && (
 						<TableCell key={index} align={`center`} className={`w-10rem border border-box`}>
 							{(() => {
-								if (colume.editeAndDelete) {
+								if (colume.editAndDelete) {
 									return (
 										<div className={`flex justify-center items-center`}>
 											<EditIcon className={`cursor-pointer text-gray-500`} onClick={editIconOnClick} />
