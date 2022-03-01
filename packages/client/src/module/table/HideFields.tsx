@@ -1,33 +1,32 @@
-import { Paper, Button } from '@mui/material'
-import { TableHeaderCol } from './CreateTableHeader'
+import { Paper } from '@mui/material'
 import TableFieldSwitch from './TableFieldSwitch'
 
-interface HideFieldsProps {
-	columes: Array<TableHeaderCol>
-	onChange?: (curState: Array<TableHeaderCol>) => void
-	onConfirm?: () => void
+export interface ShowFields {
+	header: string
+	isHidden: boolean
 }
 
-const HideFields = ({ columes, onChange = () => {}, onConfirm = () => {} }: HideFieldsProps) => {
-	const fieldSwitchOnClick = (curCol: TableHeaderCol, state: boolean) => {
+interface HideFieldsProps {
+	showFields: Array<ShowFields>
+	onChange?: (curState: Array<ShowFields>) => void
+}
+
+const HideFields = ({ showFields, onChange = () => {} }: HideFieldsProps) => {
+	const fieldSwitchOnClick = (curCol: ShowFields, state: boolean) => {
 		Reflect.set(curCol, 'isHidden', state)
-		onChange(columes)
+		onChange(showFields)
 	}
 
 	return (
 		<Paper className=" bg-light-50 p-4 flex flex-wrap w-full border" elevation={0}>
-			{columes.map(
-				(colume, index) =>
-					!colume.notHidden &&
-					colume.headerName && (
-						<TableFieldSwitch
-							key={colume.headerName + index}
-							isHiddend={colume.isHidden === undefined ? true : colume.isHidden}
-							fieldName={colume.headerName}
-							onChange={(state) => fieldSwitchOnClick(colume, state)}
-						/>
-					)
-			)}
+			{showFields.map((colume, index) => (
+				<TableFieldSwitch
+					key={colume.header + index}
+					isHiddend={colume.isHidden}
+					fieldName={colume.header}
+					onChange={(state) => fieldSwitchOnClick(colume, state)}
+				/>
+			))}
 		</Paper>
 	)
 }

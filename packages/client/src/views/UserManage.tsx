@@ -1,201 +1,72 @@
 import CircleIcon from '@mui/icons-material/Circle'
-import { Button, Modal, TextField, Typography } from '@mui/material'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import CustomSelect, { StyledOption } from '../comps/CustomSelect'
-import { CreateTable, HideFields, TableHeaderCol } from '../module/table'
-import { TableBodyRow } from '../module/table/CreateTableBody'
-import AddNewUser from './AddNewUser'
-import FindUser from './FindUser'
-import TableCellChange from './TableCellChange'
+import { Button, Typography } from '@mui/material'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
+import { useReducer, useState } from 'react'
+import CustomSelect, { StyledOption } from '../comps/CustomSelect'
+import { CreateTable, HideFields, TableBodyRow, TableHeaderCol } from '../module/table'
+import AddNewUser from './AddNewUser'
+import FindUser from './FindUser'
+import TableCellChange from './TableCellChange'
 
 const testRows = [
 	{ _id: 1, name: 'zwl1', nickname: 'zlw1', account: 'zwl1' },
 	{ _id: 2, account: 'zwl2', name: 'zwl', nickname: 'zlw', gender: 'male' },
 	{ _id: 14, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 24, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 34, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 44, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 54, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 64, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 74, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 84, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 94, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 114, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 224, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 334, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 4454, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 554, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
-	{ _id: 664, account: 'zwl3', name: 'zwl', nickname: 'zlw', gender: 'male' },
+	{ _id: 24, account: 'zwl4', name: 'zwl', nickname: 'zlw', gender: 'male' },
+	{ _id: 34, account: 'zwl5', name: 'zwl', nickname: 'zlw', gender: 'male' },
+	{ _id: 414, account: 'zwl6', name: 'zwl', nickname: 'zlw', gender: 'male' },
+	{ _id: 54, account: 'zwl7', name: 'zwl', nickname: 'zlw', gender: 'male' },
+	{ _id: 64, account: 'zwl8', name: 'zwl', nickname: 'zlw', gender: 'male' },
+	{ _id: 74, account: 'zwl9', name: 'zwl', nickname: 'zlw', gender: 'male' },
+	{ _id: 84, account: 'zwl0', name: 'zwl', nickname: 'zlw', gender: 'male' },
 ]
 
-// const Table = () => {
-// 	const [fieldsSwitch, setFiledsSwitch] = useState(false)
+interface ActionType {
+	type: string
+	payload: TableBodyRow
+}
+interface RowsState {
+	rows: TableBodyRow[]
+}
 
-// 	const [rows, setRows] = useState(testRows)
+let temp: TableBodyRow[] = []
 
-// 	const tableCellOnChange = (row, val: string, key: string) => {
-// 		console.log(rows)
-// 		rows.splice(
-// 			rows.findIndex((curRow) => row === curRow),
-// 			1,
-// 			{ ...row, [key]: val }
-// 		)
-// 		setRows([...rows])
-// 	}
+const rowsReducer = (state: TableBodyRow[], action: ActionType) => {
+	switch (action.type) {
+		case 'addToHead':
+			return (temp = [action.payload, ...state])
+		case 'addToTail':
+			return (temp = [...state, action.payload])
+		case 'delete':
+			return (temp = state.filter((row) => row !== action.payload))
+		case 'modify':
+			return state
+		case 'filter':
+			const condition = Object.entries(action.payload).filter(([key, val]) => val != '')
 
-// 	const [cols, setCols] = useState<TableHeaderCol[]>([
-// 		{
-// 			headerName: '状态',
-// 			callback: (row: any) => <CircleIcon sx={{ fontSize: '1rem', color: 'green' }} className="shadow-xl" />,
-// 		},
-// 		{
-// 			field: 'account',
-// 			headerName: '账号',
-// 			callback: (row: any) => <Typography>{Reflect.get(row, 'account') || ''}</Typography>,
-// 			editCallback: (row: any) => (
-// 				<TableCellChange
-// 					rowKey={`account`}
-// 					label="账号"
-// 					row={row}
-// 					onChange={(curRow) => tableCellOnChange(curRow, 's', 'account')}
-// 				/>
-// 			),
-// 		},
-// 		{
-// 			field: 'name',
-// 			headerName: '名称',
-// 			callback: (row: any) => <Typography>{Reflect.get(row, 'name') || ''}</Typography>,
-// 			editCallback: (row: any) => <TableCellChange rowKey={`name`} label="名称" row={row} />,
-// 		},
-// 		{
-// 			field: 'nickname',
-// 			headerName: '昵称',
-// 			callback: (row: any) => <Typography>{Reflect.get(row, 'nickname') || ''}</Typography>,
-// 			editCallback: (row: any) => <TableCellChange rowKey={`nickname`} label="昵称" row={row} />,
-// 		},
-// 		{
-// 			field: 'gender',
-// 			headerName: '性别',
-// 			callback: (row: any) => <Typography>{Reflect.get(row, 'gender') || ''}</Typography>,
-// 			editCallback: (row: any) => (
-// 				<CustomSelect defaultValue={`male`} onChange={(e) => tableCellOnChange(row, e || '', 'gender')}>
-// 					<StyledOption value={`male`}>{`male`}</StyledOption>
-// 					<StyledOption value={'female'}>{'female'}</StyledOption>
-// 				</CustomSelect>
-// 			),
-// 		},
-// 		{
-// 			headerName: '操作',
-// 			callback: () => <div></div>,
-// 			editAndDelete: true,
-// 			notHidden: true,
-// 		},
-// 	])
+			return condition.length === 0
+				? temp
+				: ((state = temp), state.filter((row) => condition.every(([key, val]) => Reflect.get(row, key) === val)))
+		default:
+			return state
+	}
+}
 
-// 	const showOrHidden = () => {
-// 		console.log(rows)
+interface ShowFields {
+	header: string
+	isHidden: boolean
+}
 
-// 		setFiledsSwitch(!fieldsSwitch)
-// 	}
-
-// 	const onSave = (row: TableBodyRow) => {
-// 		console.log(row)
-// 	}
-
-// 	const onDelete = (row: TableBodyRow) => {
-// 		const newRows = rows.splice(
-// 			rows.findIndex((currow) => currow === row),
-// 			1
-// 		)
-// 		console.log(newRows)
-// 		console.log(rows)
-
-// 		setRows((old) => {
-// 			console.log(old)
-// 			return [...old]
-// 		})
-// 	}
-
-// 	const [openModal, setOpenMadal] = useState(false)
-
-// 	const [openFindModal, setOpenFindModal] = useState(false)
-
-// 	const addData = useCallback((val: object) => {
-// 		setOpenMadal(false)
-// 		rows.unshift({ _id: 22, ...val } as any)
-// 		setRows([...rows] as any)
-// 	}, [])
-
-// 	const onFind = useCallback(
-// 		(val: object) => {
-// 			setOpenFindModal(false)
-// 			const keyAndVal = Object.entries(val).filter(([key, val]) => val != '')
-
-// 			const newRows = rows.filter((row) => {
-// 				return keyAndVal.every(([key, val]) => Reflect.get(row, key) === val)
-// 			})
-// 			console.log(newRows)
-
-// 			setRows([...newRows])
-// 		},
-// 		[rows]
-// 	)
-
-// 	return (
-// 		<div className={`flex flex-col flex-grow border rounded-xl m-4 `}>
-// 			<div className="h-3rem flex justify-end items-center">
-// 				<Button onClick={showOrHidden}>{`显示/隐藏字段`}</Button>
-// 				<Button onClick={() => setOpenFindModal(true)}>{`查找用户`}</Button>
-// 				<Button onClick={() => setOpenMadal(true)}>{`添加用户`}</Button>
-// 			</div>
-
-// 			<Modal
-// 				open={openModal}
-// 				onClose={() => setOpenMadal(false)}
-// 				aria-labelledby="modal-modal-title"
-// 				aria-describedby="modal-modal-description"
-// 				className="flex justify-center items-center h-full"
-// 			>
-// 				<div className="">
-// 					<AddNewUser onAdd={addData} onCancle={() => setOpenMadal(false)}></AddNewUser>
-// 				</div>
-// 			</Modal>
-
-// 			<Modal
-// 				open={openFindModal}
-// 				onClose={() => setOpenFindModal(false)}
-// 				aria-labelledby="modal-modal-title"
-// 				aria-describedby="modal-modal-description"
-// 				className="flex justify-center items-center h-full"
-// 			>
-// 				<div className="">
-// 					<FindUser onFind={onFind} onCancle={() => setOpenFindModal(false)}></FindUser>
-// 				</div>
-// 			</Modal>
-
-// 			<Modal
-// 				open={fieldsSwitch}
-// 				onClose={() => setFiledsSwitch(false)}
-// 				aria-labelledby="modal-modal-title"
-// 				aria-describedby="modal-modal-description"
-// 				className="flex justify-center items-center h-full"
-// 			>
-// 				<div className="">
-// 					<HideFields
-// 						columes={cols}
-// 						onConfirm={() => setFiledsSwitch(false)}
-// 						onChange={(columes) => setCols([...columes])}
-// 					/>
-// 				</div>
-// 			</Modal>
-
-// 			<CreateTable columes={cols} rows={rows} onSave={onSave} onDelete={onDelete} />
-// 		</div>
-// 	)
-// }
+const showFields: Array<ShowFields> = [
+	{ header: '状态', isHidden: true },
+	{ header: '账号', isHidden: true },
+	{ header: '名称', isHidden: true },
+	{ header: '昵称', isHidden: true },
+	{ header: '性别', isHidden: true },
+	{ header: '操作', isHidden: true },
+]
 
 export default function UserManage() {
 	const [expanded, setExpanded] = useState<string | false>(false)
@@ -204,117 +75,53 @@ export default function UserManage() {
 		expanded === panel ? setExpanded(false) : setExpanded(panel)
 	}
 
-	const [fieldsSwitch, setFiledsSwitch] = useState(false)
+	const [fieldsSwitch, setFiledsSwitch] = useState(showFields)
 
-	const [rows, setRows] = useState(testRows)
-
-	const tableCellOnChange = (row, val: string, key: string) => {
-		console.log(rows)
-		rows.splice(
-			rows.findIndex((curRow) => row === curRow),
-			1,
-			{ ...row, [key]: val }
-		)
-		setRows([...rows])
-	}
+	const [rows, dispatch] = useReducer(rowsReducer, testRows, () => (temp = testRows))
 
 	const [cols, setCols] = useState<TableHeaderCol[]>([
 		{
-			headerName: '状态',
+			header: '状态',
 			callback: (row: any) => <CircleIcon sx={{ fontSize: '1rem', color: 'green' }} className="shadow-xl" />,
 		},
 		{
 			field: 'account',
-			headerName: '账号',
+			header: '账号',
 			callback: (row: any) => <Typography>{Reflect.get(row, 'account') || ''}</Typography>,
 			editCallback: (row: any) => (
-				<TableCellChange
-					rowKey={`account`}
-					label="账号"
-					row={row}
-					onChange={(curRow) => tableCellOnChange(curRow, 's', 'account')}
-				/>
+				<TableCellChange rowKey={`account`} label="账号" row={row} onChange={(curRow) => {}} />
 			),
 		},
 		{
 			field: 'name',
-			headerName: '名称',
+			header: '名称',
 			callback: (row: any) => <Typography>{Reflect.get(row, 'name') || ''}</Typography>,
 			editCallback: (row: any) => <TableCellChange rowKey={`name`} label="名称" row={row} />,
 		},
 		{
 			field: 'nickname',
-			headerName: '昵称',
+			header: '昵称',
 			callback: (row: any) => <Typography>{Reflect.get(row, 'nickname') || ''}</Typography>,
 			editCallback: (row: any) => <TableCellChange rowKey={`nickname`} label="昵称" row={row} />,
 		},
 		{
 			field: 'gender',
-			headerName: '性别',
+			header: '性别',
 			callback: (row: any) => <Typography>{Reflect.get(row, 'gender') || ''}</Typography>,
 			editCallback: (row: any) => (
-				<CustomSelect defaultValue={`male`} onChange={(e) => tableCellOnChange(row, e || '', 'gender')}>
+				<CustomSelect defaultValue={`male`} onChange={(e) => {}}>
 					<StyledOption value={`male`}>{`male`}</StyledOption>
 					<StyledOption value={'female'}>{'female'}</StyledOption>
 				</CustomSelect>
 			),
 		},
 		{
-			headerName: '操作',
+			header: '操作',
 			callback: () => <div></div>,
 			editAndDelete: true,
 			notHidden: true,
 		},
 	])
-
-	const showOrHidden = () => {
-		console.log(rows)
-
-		setFiledsSwitch(!fieldsSwitch)
-	}
-
-	const onSave = (row: TableBodyRow) => {
-		console.log(row)
-	}
-
-	const onDelete = (row: TableBodyRow) => {
-		const newRows = rows.splice(
-			rows.findIndex((currow) => currow === row),
-			1
-		)
-		console.log(newRows)
-		console.log(rows)
-
-		setRows((old) => {
-			console.log(old)
-			return [...old]
-		})
-	}
-
-	const [openModal, setOpenMadal] = useState(false)
-
-	const [openFindModal, setOpenFindModal] = useState(false)
-
-	const addData = useCallback((val: object) => {
-		setOpenMadal(false)
-		rows.unshift({ _id: 22, ...val } as any)
-		setRows([...rows] as any)
-	}, [])
-
-	const onFind = useCallback(
-		(val: object) => {
-			setOpenFindModal(false)
-			const keyAndVal = Object.entries(val).filter(([key, val]) => val != '')
-
-			const newRows = rows.filter((row) => {
-				return keyAndVal.every(([key, val]) => Reflect.get(row, key) === val)
-			})
-			console.log(newRows)
-
-			setRows([...newRows])
-		},
-		[rows]
-	)
 
 	return (
 		<div className={`w-full`}>
@@ -338,18 +145,24 @@ export default function UserManage() {
 				</AccordionSummary>
 				<AccordionDetails>
 					{expanded === 'field' && (
-						<HideFields
-							columes={cols}
-							onConfirm={() => setFiledsSwitch(false)}
-							onChange={(columes) => setCols([...columes])}
-						/>
+						<HideFields showFields={fieldsSwitch} onChange={(fields) => setFiledsSwitch([...fields])} />
 					)}
-					{expanded === 'find' && <FindUser onFind={onFind} onCancle={() => setOpenFindModal(false)}></FindUser>}
-					{expanded === 'add' && <AddNewUser onAdd={addData} onCancle={() => setOpenMadal(false)}></AddNewUser>}
+					{expanded === 'find' && (
+						<FindUser onFind={(row) => dispatch({ type: 'filter', payload: { _id: '', ...row } })}></FindUser>
+					)}
+					{expanded === 'add' && (
+						<AddNewUser onAdd={(row) => dispatch({ type: 'addToHead', payload: { _id: 44, ...row } })}></AddNewUser>
+					)}
 				</AccordionDetails>
 			</Accordion>
 
-			<CreateTable columes={cols} rows={rows} onSave={onSave} onDelete={onDelete} />
+			<CreateTable
+				columes={cols}
+				rows={rows}
+				showFields={fieldsSwitch}
+				onDelete={(row) => dispatch({ type: 'delete', payload: row })}
+				onSave={(row) => dispatch({ type: 'addToHead', payload: row })}
+			/>
 		</div>
 	)
 }

@@ -1,29 +1,30 @@
-import { TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { TableCell, TableRow, Typography } from '@mui/material'
 import { TableBodyRow } from './CreateTableBody'
+import { ShowFields } from './HideFields'
 
 export interface TableHeaderCol {
 	field?: string
-	headerName: string
+	header: string
 	callback: (row?: TableBodyRow) => JSX.Element
 	editAndDelete?: boolean
-	isHidden?: boolean
 	notHidden?: boolean
 	editCallback?: (row?: TableBodyRow) => JSX.Element
 }
 
 interface CreateTableHeaderProps {
 	columes: Array<TableHeaderCol>
+	showFields: Array<ShowFields>
 }
 
-const CreateTableHeader = ({ columes }: CreateTableHeaderProps) => {
+const CreateTableHeader = ({ columes, showFields }: CreateTableHeaderProps) => {
 	return (
 		<TableRow>
 			{columes.map(
 				(colume, index) =>
-					(colume.isHidden === undefined ? true : colume.isHidden) &&
-					colume.headerName && (
-						<TableCell key={colume.headerName + index} align={`center`} className={`border-box`}>
-							{<Typography className={`text-dark-900 text-bold`}> {colume['headerName']}</Typography>}
+					showFields &&
+					showFields.find((field) => field.header === colume.header)?.isHidden && (
+						<TableCell key={colume.header + index} align={`center`} className={`border-box`}>
+							{<Typography className={`text-dark-900 text-bold`}> {colume['header']}</Typography>}
 						</TableCell>
 					)
 			)}

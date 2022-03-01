@@ -2,19 +2,21 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import SaveIcon from '@mui/icons-material/Save'
 import { TableCell, TableRow } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { TableBodyRow } from './CreateTableBody'
 import { TableHeaderCol } from './CreateTableHeader'
+import { ShowFields } from './HideFields'
 
 interface TableRow {
 	columes: Array<TableHeaderCol>
 	row: TableBodyRow
+	showFields: Array<ShowFields>
 	onEdit?: (row: TableBodyRow) => void
 	onDelete?: (row: TableBodyRow) => void
 	onSave?: (row: TableBodyRow) => void
 }
 const CreateTableRowTest = (props: TableRow) => {
-	const { row, columes, onEdit = () => {}, onDelete = () => {}, onSave = () => {} } = props
+	const { row, columes, showFields, onEdit = () => {}, onDelete = () => {}, onSave = () => {} } = props
 
 	const [isEditeState, setIsEditeState] = useState(false)
 
@@ -38,7 +40,8 @@ const CreateTableRowTest = (props: TableRow) => {
 		<TableRow>
 			{columes.map(
 				(colume, index) =>
-					(colume.isHidden === undefined ? true : colume.isHidden) && (
+					showFields &&
+					showFields.find((field) => field.header === colume.header)?.isHidden && (
 						<TableCell key={index} align={`center`} className={`w-10rem border-box`}>
 							{(() => {
 								if (colume.editAndDelete) {

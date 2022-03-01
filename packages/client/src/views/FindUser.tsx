@@ -1,5 +1,5 @@
-import { Button, TextField, Typography } from '@mui/material'
-import { useState } from 'react'
+import { TextField } from '@mui/material'
+import { useEffect, useState } from 'react'
 
 interface AddNewUserProps {
 	onCancle?: () => void
@@ -16,8 +16,12 @@ const FindUser = (props: AddNewUserProps) => {
 		gender: '',
 	})
 
-	const inputOnChange = (field: string, val: string) => {
-		setUserInfo({ ...userInfo, [field]: val })
+	useEffect(() => {
+		onFind(userInfo)
+	}, [userInfo])
+
+	const inputOnChange = async (field: string, val: string) => {
+		await setUserInfo({ ...userInfo, [field]: val })
 	}
 
 	return (
@@ -51,10 +55,6 @@ const FindUser = (props: AddNewUserProps) => {
 					sx={{ m: '0.4rem', width: '30%' }}
 					onChange={(e) => inputOnChange('gender', e.target.value)}
 				/>
-			</div>
-
-			<div className="flex justify-end m-4">
-				<Button variant="contained" disableElevation onClick={() => onFind(userInfo)}>{`确定`}</Button>
 			</div>
 		</div>
 	)

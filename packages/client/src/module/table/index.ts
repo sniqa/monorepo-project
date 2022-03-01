@@ -1,4 +1,6 @@
 import CreateTable from './CreateTable'
-import HideFields from './HideFields'
+import type { TableBodyRow } from './CreateTableBody'
 import type { TableHeaderCol } from './CreateTableHeader'
-export { CreateTable, HideFields, TableHeaderCol }
+import HideFields from './HideFields'
+export { CreateTable, HideFields, TableHeaderCol, TableBodyRow }
+

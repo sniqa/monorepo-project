@@ -1,16 +1,18 @@
-import { Table, TableContainer, TableHead, TableBody } from '@mui/material'
+import { Table, TableBody, TableContainer, TableHead } from '@mui/material'
 import CreateTableBody, { TableBodyRow } from './CreateTableBody'
 import CreateTableHeader, { TableHeaderCol } from './CreateTableHeader'
+import { ShowFields } from './HideFields'
 
 interface CreateTableProps {
 	columes: Array<TableHeaderCol>
 	rows: Array<TableBodyRow>
+	showFields?: Array<ShowFields>
 	onSave?: (row: TableBodyRow) => void
 	onDelete?: (row: TableBodyRow) => void
 }
 
 export const CreateTable = (props: CreateTableProps) => {
-	const { columes, rows, onSave = () => {}, onDelete = () => {} } = props
+	const { columes, rows, showFields = [], onSave = () => {}, onDelete = () => {} } = props
 
 	return (
 		<TableContainer
@@ -23,11 +25,11 @@ export const CreateTable = (props: CreateTableProps) => {
 				stickyHeader
 			>
 				<TableHead>
-					<CreateTableHeader columes={columes} />
+					<CreateTableHeader columes={columes} showFields={showFields} />
 				</TableHead>
 
 				<TableBody>
-					<CreateTableBody columes={columes} rows={rows} onSave={onSave} onDelete={onDelete} />
+					<CreateTableBody columes={columes} rows={rows} showFields={showFields} onSave={onSave} onDelete={onDelete} />
 				</TableBody>
 			</Table>
 		</TableContainer>
