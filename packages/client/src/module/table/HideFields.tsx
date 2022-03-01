@@ -15,7 +15,7 @@ const HideFields = ({ columes, onChange = () => {}, onConfirm = () => {} }: Hide
 	}
 
 	return (
-		<Paper className=" bg-light-50 p-4 w-20rem" elevation={0}>
+		<Paper className=" bg-light-50 p-4 flex flex-wrap w-full border" elevation={0}>
 			{columes.map(
 				(colume, index) =>
 					!colume.notHidden &&
@@ -28,10 +28,6 @@ const HideFields = ({ columes, onChange = () => {}, onConfirm = () => {} }: Hide
 						/>
 					)
 			)}
-
-			<div className="flex justify-end">
-				<Button variant="contained" onClick={onConfirm}>{`确定`}</Button>
-			</div>
 		</Paper>
 	)
 }

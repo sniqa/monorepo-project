@@ -14,7 +14,7 @@ export function MainLayout({ aside, header, main }: MainLayoutProps) {
 			<div id="app-main-layout-body" className="flex-grow flex flex-col">
 				{header && <header id="app-main-layout-header">{header}</header>}
 				{main && (
-					<main id="app-main-layout-main" className={`flex flex-grow`}>
+					<main id="app-main-layout-main" className={`flex flex-grow  overflow-hidden`}>
 						{main}
 					</main>
 				)}

@@ -15,7 +15,7 @@ export default function TableFieldSwitch(props: TableFieldSwitchProps) {
 	}, [])
 
 	return (
-		<div className="flex justify-between items-center border my-2 rounded pl-4">
+		<div className="flex justify-between items-center border m-2 rounded pl-4 w-12rem">
 			<Typography>{fieldName}</Typography>
 			<Switch checked={isHiddend} onChange={(e) => switchOnChange(e.target.checked)} />
 		</div>

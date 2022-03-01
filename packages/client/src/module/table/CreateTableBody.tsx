@@ -1,5 +1,5 @@
 import { TableBody } from '@mui/material'
-import { useMemo } from 'react'
+import { useMemo, Fragment } from 'react'
 import { TableHeaderCol } from './CreateTableHeader'
 import CreateTableRowTest from './CreateTableRowTest'
 
@@ -18,11 +18,11 @@ const CreateTableBody = (props: CreateTableBodyProps) => {
 	const { rows, columes, onSave = () => {}, onDelete = () => {} } = props
 
 	return (
-		<TableBody>
+		<Fragment>
 			{rows.map((row, rowIdx) => (
 				<CreateTableRowTest key={row._id} columes={columes} row={row} onSave={onSave} onDelete={onDelete} />
 			))}
-		</TableBody>
+		</Fragment>
 	)
 }
 

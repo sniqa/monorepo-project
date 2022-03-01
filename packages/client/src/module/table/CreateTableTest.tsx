@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableHead, TableBody } from '@mui/material'
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
 import CreateTableBody, { TableBodyRow } from './CreateTableBody'
 import CreateTableHeader, { TableHeaderCol } from './CreateTableHeader'
 
@@ -9,7 +9,7 @@ interface CreateTableProps {
 	onDelete?: (row: TableBodyRow) => void
 }
 
-export const CreateTable = (props: CreateTableProps) => {
+export const CreateTableTest = (props: CreateTableProps) => {
 	const { columes, rows, onSave = () => {}, onDelete = () => {} } = props
 
 	return (
@@ -26,12 +26,10 @@ export const CreateTable = (props: CreateTableProps) => {
 					<CreateTableHeader columes={columes} />
 				</TableHead>
 
-				<TableBody>
-					<CreateTableBody columes={columes} rows={rows} onSave={onSave} onDelete={onDelete} />
-				</TableBody>
+				<TableBody></TableBody>
 			</Table>
 		</TableContainer>
 	)
 }
 
-export default CreateTable
+export default CreateTableTest

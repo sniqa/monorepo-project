@@ -14,7 +14,7 @@ interface TableRow {
 	onSave?: (row: TableBodyRow) => void
 }
 const CreateTableRowTest = (props: TableRow) => {
-	const { row, columes, onEdit = () => {}, onDelete = () => {}, onSave = () => {} } = useMemo(() => props, [props])
+	const { row, columes, onEdit = () => {}, onDelete = () => {}, onSave = () => {} } = props
 
 	const [isEditeState, setIsEditeState] = useState(false)
 
@@ -39,7 +39,7 @@ const CreateTableRowTest = (props: TableRow) => {
 			{columes.map(
 				(colume, index) =>
 					(colume.isHidden === undefined ? true : colume.isHidden) && (
-						<TableCell key={index} align={`center`} className={`w-10rem border border-box`}>
+						<TableCell key={index} align={`center`} className={`w-10rem border-box`}>
 							{(() => {
 								if (colume.editAndDelete) {
 									return (
