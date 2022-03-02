@@ -42,7 +42,9 @@ const rowsReducer = (state: TableBodyRow[], action: ActionType) => {
 		case 'delete':
 			return (temp = state.filter((row) => row !== action.payload))
 		case 'modify':
-			return state
+			console.log(action.payload)
+
+			return (temp = state.map((row) => (row._id === action.payload._id ? action.payload : row)))
 		case 'filter':
 			const condition = Object.entries(action.payload).filter(([key, val]) => val != '')
 
@@ -89,27 +91,49 @@ export default function UserManage() {
 			header: '账号',
 			callback: (row: any) => <Typography>{Reflect.get(row, 'account') || ''}</Typography>,
 			editCallback: (row: any) => (
-				<TableCellChange rowKey={`account`} label="账号" row={row} onChange={(curRow) => {}} />
+				<TableCellChange
+					rowKey={`account`}
+					label="账号"
+					row={row}
+					onChange={(val) => dispatch({ type: 'modify', payload: { ...row, name: account || '' } })}
+				/>
 			),
 		},
 		{
 			field: 'name',
 			header: '名称',
 			callback: (row: any) => <Typography>{Reflect.get(row, 'name') || ''}</Typography>,
-			editCallback: (row: any) => <TableCellChange rowKey={`name`} label="名称" row={row} />,
+			editCallback: (row: any) => (
+				<TableCellChange
+					rowKey={`name`}
+					label="名称"
+					row={row}
+					onChange={(val) => dispatch({ type: 'modify', payload: { ...row, name: val || '' } })}
+				/>
+			),
 		},
 		{
 			field: 'nickname',
 			header: '昵称',
 			callback: (row: any) => <Typography>{Reflect.get(row, 'nickname') || ''}</Typography>,
-			editCallback: (row: any) => <TableCellChange rowKey={`nickname`} label="昵称" row={row} />,
+			editCallback: (row: any) => (
+				<TableCellChange
+					rowKey={`nickname`}
+					label="昵称"
+					row={row}
+					onChange={(val) => dispatch({ type: 'modify', payload: { ...row, nickname: val || '' } })}
+				/>
+			),
 		},
 		{
 			field: 'gender',
 			header: '性别',
 			callback: (row: any) => <Typography>{Reflect.get(row, 'gender') || ''}</Typography>,
 			editCallback: (row: any) => (
-				<CustomSelect defaultValue={`male`} onChange={(e) => {}}>
+				<CustomSelect
+					defaultValue={`male`}
+					onChange={(val) => dispatch({ type: 'modify', payload: { ...row, gender: val || '' } })}
+				>
 					<StyledOption value={`male`}>{`male`}</StyledOption>
 					<StyledOption value={'female'}>{'female'}</StyledOption>
 				</CustomSelect>
@@ -161,7 +185,7 @@ export default function UserManage() {
 				rows={rows}
 				showFields={fieldsSwitch}
 				onDelete={(row) => dispatch({ type: 'delete', payload: row })}
-				onSave={(row) => dispatch({ type: 'addToHead', payload: row })}
+				onSave={(row) => dispatch({ type: 'modify', payload: row })}
 			/>
 		</div>
 	)

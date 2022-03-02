@@ -27,7 +27,6 @@ const CreateTableRowTest = (props: TableRow) => {
 
 	const saveIconOnClick = () => {
 		setIsEditeState(false)
-		console.log(row)
 
 		onSave(row)
 	}
