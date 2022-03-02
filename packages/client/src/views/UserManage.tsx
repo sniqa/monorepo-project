@@ -27,9 +27,6 @@ interface ActionType {
 	type: string
 	payload: TableBodyRow
 }
-interface RowsState {
-	rows: TableBodyRow[]
-}
 
 let temp: TableBodyRow[] = []
 
@@ -95,7 +92,7 @@ export default function UserManage() {
 					rowKey={`account`}
 					label="账号"
 					row={row}
-					onChange={(val) => dispatch({ type: 'modify', payload: { ...row, name: account || '' } })}
+					onChange={(val) => dispatch({ type: 'modify', payload: { ...row, account: val || '' } })}
 				/>
 			),
 		},
